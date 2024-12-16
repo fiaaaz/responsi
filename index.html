@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous" />
+    <title>WebGIS Peta Interaktif Wisata Kabupaten Malang</title>
+    <style>
+        /* Aturan CSS untuk background halaman */
+        body {
+            background: url('malangwall.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #7dba9b;
+        }
+
+        #map {
+            height: 500px;
+            margin-top: 20px;
+            border: 3px solid #d90e84;
+            border-radius: 10px;
+        }
+
+        main {
+            margin: 50px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
+
+        .navbar {
+            background-color: #7dba9b;
+        }
+
+        /* Style untuk Landing Page */
+        .hero-section {
+            background-color: rgba(0, 0, 0, 0.5);
+            background-image: url('malang.jpg');
+            background-size: cover;
+            color: #7dba9b;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .hero-section .btn {
+            background-color: #d90e84;
+            border-color: #d90e84;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="fa-solid fa-map-location-dot" style="color: #d90e84;"></i> WebGIS
+                Persebaran Lokasi Wisata di Kabupaten Malang</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://malangkab.ina-sdi.or.id/" target="_blank"><i
+                                class="fa-solid fa-layer-group" style="color: #d95f0e;"></i> Sumber Data</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#InfoModal"><i
+                                class="fa-solid fa-user" style="color: #0e8ed9;"></i> Info Pembuat</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Info Modal -->
+    <div class="modal fade" id="InfoModal" tabindex="-1" aria-labelledby="InfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="InfoModalLabel">Info Pembuat</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>Nama</th>
+                            <td>Zahra Alifia</td>
+                        </tr>
+                        <tr>
+                            <th>NIM</th>
+                            <td>23/518296/SV/22946</td>
+                        </tr>
+                        <tr>
+                            <th>Kelas</th>
+                            <td>PGWEB A</td>
+                        </tr>
+                        <tr>
+                            <th>GitHub</th>
+                            <td>
+                                <a href="https://github.com/fiaaaz" target="_blank" rel="noopener noreferrer">
+                                    https://github.com/fiaaaz
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <section>
+            <h1
+                style="text-align: center; display: flex; justify-content: center; align-items: center; border: 2px solid white; padding: 20px; background-color: rgba(180, 209, 171, 0.7); border-radius: 8px;">
+                <p style="margin: 0; font-size: 32px; font-weight: bold; color: #333;">
+                    KABUPATEN MALANG
+                </p>
+            </h1>
+        </section>
+    </main>
+
+
+
+    <main>
+        <section>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <img src="malangkab.jpg" alt="Peta Kabupaten Malang"
+                    style="max-width: 40%; height: auto; margin-right: 20px;">
+                <div
+                    style="flex: 1; border: 2px solid white; padding: 20px; background-color: rgba(124, 191, 102, 0.7); border-radius: 8px;">
+                    <h4 style="font-size: 16px; color: #333; margin-bottom: 15px;">
+                        Kabupaten Malang adalah salah satu Kabupaten di Indonesia yang terletak di Provinsi Jawa Timur
+                        dan
+                        merupakan Kabupaten kedua yang terluas wilayahnya setelah Kabupaten Banyuwangi dari 38
+                        kabupaten/kota yang ada di Jawa Timur. Hal ini didukung dengan luas wilayahnya 3.534,86 km² atau
+                        sama dengan 353.486 ha dan jumlah penduduknya 2.446.218 jiwa (tahun 2010). Kabupaten Malang juga
+                        dikenal sebagai daerah yang kaya akan potensi diantaranya dari pertanian, perkebunan, tanaman
+                        obat
+                        keluarga dan lain sebagainya. Disamping itu juga dikenal dengan obyek-obyek wisatanya.
+                    </h4>
+                    <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                        Kabupaten Malang terletak pada 112°17`10,90“ sampai 112°57`00“ Bujur Timur, 7°44`55,11“ sampai
+                        8°26`35,45“ Lintang Selatan. Secara administratif, Kabupaten Malang terbagi menjadi 33
+                        kecamatan,
+                        yang dibagi lagi menjadi sejumlah desa dan kelurahan. Pusat pemerintahan di Kecamatan Kepanjen.
+                        Pusat pemerintahan sebelumnya berada di Kota Malang. Kota Batu dahulu bagian dari Kabupaten
+                        Malang,
+                        sejak tahun 2001 memisahkan diri setelah ditetapkan menjadi kota. Bersama dengan Kota Batu dan
+                        Kota
+                        Malang, Kabupaten Malang merupakan bagian dari kesatuan wilayah yang dikenal dengan Malang Raya.
+                    </p>
+                    <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                        Kabupaten ini berbatasan langsung dengan Kota Malang dan Kota Batu tepat di tengah-tengahnya.
+                        Adapun
+                        batas-batas wilayah Kabupaten Malang adalah sebagai berikut:
+                    </p>
+                    <ul style="font-size: 16px; color: #0d0d0d;">
+                        <li>Sebelah Utara : Kabupaten Pasuruan dan Kabupaten Mojokerto</li>
+                        <li>Sebelah Barat : Kabupaten Blitar dan Kabupaten Kediri</li>
+                        <li>Sebelah Selatan : Samudera Indonesia (Hindia)</li>
+                        <li>Sebelah Timur : Kabupaten Probolinggo dan Kabupaten Lumajang</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <main>
+        <section>
+            <h4>
+                <div
+                    style="flex: 1; border: 2px solid white; padding: 20px; background-color: rgba(124, 191, 102, 0.7); border-radius: 8px;">
+                    <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                        Sebagian besar wilayah Kabupaten Malang berupa pegunungan. Bagian barat dan barat laut
+                        berupa
+                        pegunungan, dengan puncaknya Gunung Arjuno (3.339 m) dan Gunung Kawi (2.651 m). Di
+                        pegunungan
+                        ini
+                        terdapat mata air Sungai Brantas, sungai terpanjang di Jawa Timur.
+                    </p>
+                    <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                        Bagian timur merupakan kompleks Pegunungan Bromo-Tengger-Semeru, dengan puncaknya Gunung
+                        Bromo
+                        (2.392 m) dan Gunung Semeru (3.676 m). Gunung Semeru adalah gunung tertinggi di Pulau Jawa.
+                        Kota
+                        Malang sendiri berada di cekungan antara kedua wilayah pegunungan tersebut. Bagian selatan
+                        berupa
+                        pegunungan dan dataran bergelombang. Dataran rendah di pesisir selatan cukup sempit dan
+                        sebagian
+                        besar pantainya berbukit.
+                    </p>
+                    <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                        Kabupaten Malang memiliki potensi pertanian dengan iklim sejuk. Daerah utara dan timur
+                        banyak
+                        digunakan untuk perkebunan apel. Daerah pegunungan di barat banyak ditanami sayuran dan
+                        menjadi
+                        salah satu penghasil sayuran utama di Jawa Timur. Daerah selatan banyak digunakan ditanami
+                        tebu
+                        dan
+                        hortikultura, seperti salak dan semangka. Selain perkebunan teh, Kabupaten Malang juga
+                        berpotensi
+                        untuk perkebunanan kopi dan cokelat (daerah pegunungan Kecamatan Tirtoyudo). Hutan jati
+                        banyak
+                        terdapat di bagian selatan yang merupakan daerah pegunungan kapur.
+                    </p>
+                </div>
+            </h4>
+        </section>
+    </main>
+
+    <main>
+        <section>
+            <div
+                style="flex: 1; border: 2px solid white; padding: 20px; background-color: rgba(124, 191, 102, 0.7); border-radius: 8px;">
+                <h4 class="mb-3">Deskripsi</h4>
+                <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                    Kabupaten Malang di Jawa Timur menawarkan berbagai destinasi wisata yang menarik, mulai dari alam,
+                    budaya, hingga sejarah. Di antaranya adalah Kota Batu yang dikenal dengan wisata alam seperti Jatim
+                    Park, Batu Secret Zoo, dan Air Terjun Coban Rondo. Kabupaten ini juga memiliki pantai eksotis di
+                    pesisir
+                    selatan seperti Pantai Balekambang dan Pantai Goa China. Wisata sejarah dapat ditemukan di Candi
+                    Singosari, sementara Taman Nasional Bromo Tengger Semeru menyajikan pemandangan menakjubkan dengan
+                    keindahan Gunung Bromo. Selain itu, tempat wisata lain yang populer termasuk Taman Rekreasi Selecta,
+                    Kebun Teh Wonosari, Kampung Warna-Warni Jodipan, dan Taman Safari Indonesia II Prigen, yang semuanya
+                    menawarkan pengalaman berbeda dalam menikmati keindahan alam dan budaya lokal.</p>
+                </>
+        </section>
+    </main>
+
+    <main>
+        <section class="mt-5">
+            <h4 class="mb-3">Peta Interaktif</h4>
+            <div id="map"></div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Inisialisasi peta
+        var map = L.map("map").setView([-7.9666, 112.6326], 11);
+
+        // Layer dasar
+        var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var esriImagery = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+            attribution: "Tiles © Esri"
+        });
+
+        // Layer WMS dari GeoServer
+        var administrasi = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: "responsi:administrasidesa_ar_25k_350720241016143530",
+            format: "image/png",
+            transparent: true,
+            attribution: "GeoServer"
+        });
+
+        var jalan = L.tileLayer.wms("http://localhost:8080/geoserver/wms", {
+            layers: "responsi:JALAN_LN_25K",
+            format: "image/png",
+            transparent: true,
+            attribution: "GeoServer"
+        });
+
+        var wisataBuatan = L.tileLayer.wms("https://malangkab.ina-sdi.or.id/geoserver/wms?", {
+            layers: "Disparbud:destinasi_wisata_buatan_350720230925171834",
+            format: "image/png",
+            transparent: true
+        });
+
+        var wisataBudaya = L.tileLayer.wms("https://malangkab.ina-sdi.or.id/geoserver/wms?", {
+            layers: "Disparbud:destinasi_wisata_budaya_350720230925172019",
+            format: "image/png",
+            transparent: true
+        });
+
+        var wisataAlam = L.tileLayer.wms("https://malangkab.ina-sdi.or.id/geoserver/wms?", {
+            layers: "Disparbud:destinasi_wisata_alam_350720230925171651",
+            format: "image/png",
+            transparent: true
+        });
+
+        // Tambahkan layer default
+        administrasi.addTo(map);
+
+        // Kontrol Layer
+        var baseMaps = {
+            "OpenStreetMap": osm,
+            "Esri Imagery": esriImagery
+        };
+
+        var overlayMaps = {
+            "Batas Administrasi": administrasi,
+            "Jalan": jalan,
+            "Wisata Buatan": wisataBuatan,
+            "Wisata Budaya": wisataBudaya,
+            "Wisata Alam": wisataAlam
+        };
+
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+        // Tambahkan marker
+        var marker1 = L.marker([-7.9835, 112.6326]).addTo(map).bindPopup('<b>Halaman 1</b><br><a href="page1.html">Klik untuk melihat halaman wisata budaya</a>');
+        var marker2 = L.marker([-7.8500, 112.7500]).addTo(map).bindPopup('<b>Halaman 2</b><br><a href="page2.html">Klik untuk melihat halaman wisata buatan</a>');
+        var marker3 = L.marker([-7.9826, 112.6214]).addTo(map).bindPopup('<b>Halaman 3</b><br><a href="page3.html">Klik untuk melihat halaman wisata alam</a>');
+    </script>
+
+
+    <main class="tentang-kami-section">
+        <section>
+            <div
+                style="flex: 1; border: 2px solid white; padding: 15px; background-color: rgba(142, 193, 126, 0.7); border-radius: 8px;">
+                <h4 style="font-size: 24px; font-weight: bold; text-align: center;">Tentang Kami</h4>
+                <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                    Selamat datang di <b>WebGIS Persebaran Lokasi Wisata di Kabupaten Malang</b>, platform interaktif
+                    yang
+                    dirancang untuk memberikan informasi akurat dan terkini tentang destinasi wisata di wilayah
+                    Kabupaten
+                    Malang.
+                </p>
+                <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                    Tujuan kami adalah mempermudah masyarakat dan wisatawan dalam menjelajahi berbagai destinasi wisata
+                    yang
+                    meliputi wisata alam, budaya, dan buatan. Dengan memanfaatkan teknologi peta digital, kami ingin
+                    memberikan pengalaman yang informatif, menarik, dan mudah diakses.
+                </p>
+                <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                    Platform ini juga merupakan bagian dari proyek tugas mata kuliah PGWEB di Program Studi Sistem
+                    Informasi Geografis, Universitas Gadjah Mada. Semua data yang digunakan bersumber dari lembaga resmi
+                    seperti
+                    GeoServer Kabupaten Malang dan penyedia data lainnya.
+                </p>
+                <p style="font-size: 16px; color: #0d0d0d; line-height: 1.6;">
+                    Jika Anda memiliki saran, pertanyaan, atau ingin berkontribusi, jangan ragu untuk menghubungi kami
+                    melalui
+                    <a href="mailto:zahraaliafia270505@gmail.com" style="color: #d90e84; text-decoration: underline;">email
+                        kami</a>
+                </p>
+                <p style="text-align: center; font-size: 16px; color: #333;">
+                    <b>Terima kasih telah menggunakan layanan kami!</b>
+                </p>
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>

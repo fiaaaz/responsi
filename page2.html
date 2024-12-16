@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <section>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Wisata Buatan</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <style>
+            /* Aturan CSS untuk halaman */
+            body {
+                background: url('taman-wisata-lembah-dieng.jpg') no-repeat center center fixed;
+                background-size: cover;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                color: #fff;
+            }
+
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+
+            p {
+                line-height: 1.6;
+                text-align: justify;
+                margin: 20px;
+            }
+
+            button {
+                display: block;
+                margin: 20px auto;
+                background-color: #007bff;
+                border: none;
+                padding: 10px 20px;
+                color: white;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+            button a {
+                color: white;
+                text-decoration: none;
+            }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+            #map {
+                height: 500px;
+                margin: 20px auto;
+                border: 3px solid #d90e84;
+                border-radius: 10px;
+            }
+
+            main {
+                margin: 50px;
+                padding: 20px;
+                background-color: rgba(255, 255, 255, 0.8);
+                color: #000;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 20px;
+            }
+        </style>
+    </section>
+</head>
+
+<body>
+    <main>
+        <section>
+            <h1>Selamat datang di Halaman Wisata Buatan!</h1>
+            <p>Informasi terkait wisata buatan dapat ditemukan di sini.</p>
+            <p>Wisata buatan adalah jenis kegiatan pariwisata yang berfokus pada daya tarik yang diciptakan atau
+                dibangun oleh manusia untuk tujuan rekreasi, hiburan, atau edukasi. Wisata ini tidak bergantung pada
+                keindahan
+                atau
+                kekayaan alam, melainkan pada kreativitas dan inovasi dalam menciptakan tempat atau pengalaman yang
+                menarik bagi
+                wisatawan.</p>
+
+            <button>
+                <a href="index.html">Homepage</a>
+            </button>
+        </section>
+    </main>
+
+    <main>
+        <section>
+            <h4>Peta Persebaran Lokasi Wisata Buatan</h4>
+            <!-- Map Container -->
+            <div id="map"></div>
+        </section>
+    </main>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Inisialisasi peta
+        var map = L.map("map").setView([-7.9666, 112.6326], 11);
+
+        // Layer dasar
+        var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var esriImagery = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+            attribution: "Tiles © Esri"
+        });
+
+        // Marker untuk lokasi wisata buatan
+        var wisataMarkers = [
+            { lat: -8.203729106, lng: 112.7523852, name: "Kolam Renang Sumber Palung" },
+            { lat: -7.958501707, lng: 112.597042, name: "Museum Zoologi Frater Vianney" },
+            { lat: -7.938039817, lng: 112.5436374, name: "Wisata Petik Jeruk Bedengan" },
+            { lat: -7.965020659, lng: 112.5993186, name: "Taman Wisata Lembah Dieng" },
+            { lat: -7.91520344, lng: 112.5891235, name: "Taman Rekreasi Sengkaling" },
+            { lat: -8.348669174, lng: 112.3683414, name: "Paralayang Bukit Waung Modangan" },
+            { lat: -7.781781282, lng: 112.3111813, name: "Kasembon Park (K-Park)" },
+            { lat: -7.804143015, lng: 112.3130063, name: "Kasembon Rafting" },
+            { lat: -7.79960343, lng: 112.3132908, name: "Kampung Ratu" },
+            { lat: -7.788482225, lng: 112.3124267, name: "Kali Uceng Rafting Tubing" },
+            { lat: -8.16980212, lng: 112.5699127, name: "Taman Wisata Keluarga Sengguruh" },
+            { lat: -8.126431667, lng: 112.5625777, name: "Pemandian Metro" },
+            { lat: -7.827484201, lng: 112.6820672, name: "Tlogo Land" },
+            { lat: -7.8250151, lng: 112.7154232, name: "Museum Kesehatan Jiwa" },
+            { lat: -7.848634582, lng: 112.6958733, name: "Petik Madu" },
+            { lat: -8.029143202, lng: 112.5363708, name: "Embung Kapurono" },
+            { lat: -7.88358641, lng: 112.7481566, name: "Paralayang Sidoluhur" },
+            { lat: -7.829008831, lng: 112.6741552, name: "Vila Buah Naga" },
+            { lat: -8.000835751, lng: 112.4946399, name: "Lembah Indah Malang" },
+            { lat: -7.848874367, lng: 112.3779806, name: "Ngantang Park" },
+            { lat: -7.873544649, lng: 112.3575125, name: "Bendungan Selorejo" },
+            { lat: -8.194024051, lng: 112.617789, name: "Agro Salak" },
+            { lat: -7.95209152, lng: 112.6744789, name: "Taman Wisata Air Wendit" },
+            { lat: -8.049619488, lng: 112.6086638, name: "Taman Rekreasi Bonderland" },
+            { lat: -8.013860111, lng: 112.8543259, name: "Rafting Ndayung" },
+            { lat: -8.031888273, lng: 112.8275621, name: "Ledok Amprong River Tubing" },
+            { lat: -8.038832888, lng: 112.8131972, name: "Sedaer River Tubing" },
+            { lat: -8.039597772, lng: 112.8119527, name: "Banyu Maro River Tubing" },
+            { lat: -8.001410334, lng: 112.8647691, name: "Agro Apel" },
+            { lat: -7.807033341, lng: 112.4908852, name: "Agro Apel" },
+            { lat: -7.839369786, lng: 112.450803, name: "Pujon Rafting" },
+            { lat: -7.851199005, lng: 112.494227, name: "Taman Kelinci" },
+            { lat: -7.853846798, lng: 112.4857075, name: "Santera Flora Wisata" },
+            { lat: -7.861764228, lng: 112.4281288, name: "Taman Kemesraan" },
+            { lat: -7.839481486, lng: 112.4497612, name: "Pemandian Dewi Sri" },
+            { lat: -7.820272304, lng: 112.6438261, name: "Kebun Teh Wonosari" },
+            { lat: -7.880753467, lng: 112.6638823, name: "Pemandian Kendedes" },
+            { lat: -7.923120496, lng: 112.6575077, name: "Hawai Water Park" },
+            { lat: -8.161164459, lng: 112.5155193, name: "Café Apung" },
+            { lat: -8.14486346, lng: 112.4518087, name: "Bendungan Lahor" },
+            { lat: -8.156646886, lng: 112.4488036, name: "Bendungan Karangkates/Sutami" },
+            { lat: -7.995251252, lng: 112.7776826, name: "Taman Buah Jeru" },
+            { lat: -8.13365289, lng: 112.6825187, name: "Pemandian Sumber Alam" },
+            { lat: -8.120176098, lng: 112.7811071, name: "Kampung Enem" },
+            { lat: -8.094460182, lng: 112.4852559, name: "Wisata Agro Edukasi" },
+            { lat: -8.028160509, lng: 112.4868958, name: "Selo Tumpeng (Ekowisata Buah)" },
+            { lat: -8.033149274, lng: 112.4869919, name: "Kolam Renang Seloagung" }
+        ];
+
+        // Tambahkan marker ke peta
+        wisataMarkers.forEach(function (marker) {
+            L.marker([marker.lat, marker.lng])
+                .bindPopup("<b>" + marker.name + "</b>")
+                .addTo(map);
+        });
+
+        // Layer wisata budaya
+        var wisataBuatan = L.tileLayer.wms("https://malangkab.ina-sdi.or.id/geoserver/wms", {
+            layers: "Disparbud:destinasi_wisata_buatan_350720230925171834",
+            format: "image/png",
+            transparent: true
+        });
+
+        // Kontrol Layer
+        var baseMaps = {
+            "OpenStreetMap": osm,
+            "Esri Imagery": esriImagery
+        };
+
+        var overlayMaps = {
+            "Wisata Buatan": wisataBuatan
+        };
+
+        L.control.layers(baseMaps, overlayMaps).addTo(map);
+    </script>
+
+    <script>
+        // Smooth Scroll untuk tombol "Go to Map"
+        document.querySelector('.btn-map').addEventListener('click', function (event) {
+            event.preventDefault(); // Mencegah aksi default
+            document.querySelector('#map-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>

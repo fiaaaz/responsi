@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <section>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Wisata Alam</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <style>
+            /* Aturan CSS untuk halaman */
+            body {
+                background: url('pantai.jpg') no-repeat center center fixed;
+                background-size: cover;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                color: #fff;
+            }
+
+            h1 {
+                text-align: center;
+                color: #333;
+            }
+
+            p {
+                line-height: 1.6;
+                text-align: justify;
+                margin: 20px;
+            }
+
+            button {
+                display: block;
+                margin: 20px auto;
+                background-color: #007bff;
+                border: none;
+                padding: 10px 20px;
+                color: white;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+
+            button a {
+                color: white;
+                text-decoration: none;
+            }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+            #map {
+                height: 500px;
+                margin: 20px auto;
+                border: 3px solid #d90e84;
+                border-radius: 10px;
+            }
+
+            main {
+                margin: 50px;
+                padding: 20px;
+                background-color: rgba(255, 255, 255, 0.8);
+                color: #000;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                border-radius: 20px;
+            }
+        </style>
+    </section>
+</head>
+
+<body>
+    <main>
+        <section>
+            <h1>Selamat Datang di Halaman Wisata Alam!</h1>
+            <p>Informasi terkait wisata Alam dapat ditemukan di sini.</p>
+            <p>Wisata alam adalah kegiatan rekreasi yang dilakukan di lingkungan alam terbuka untuk menikmati keindahan,
+                keunikan, dan keasrian alam. Wisata ini melibatkan pengalaman langsung dengan alam, seperti gunung,
+                pantai, danau, hutan, air terjun, gua, atau taman nasional. Selain untuk relaksasi, wisata alam sering
+                dikaitkan dengan upaya pelestarian lingkungan dan edukasi tentang ekosistem serta keanekaragaman hayati.
+            </p>
+
+            <button>
+                <a href="index.html">Homepage</a>
+            </button>
+        </section>
+    </main>
+
+    <main>
+        <section>
+            <h4>Peta Persebaran Lokasi Wisata Buatan</h4>
+            <!-- Map Container -->
+            <div id="map"></div>
+        </section>
+    </main>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Inisialisasi peta
+        var map = L.map("map").setView([-7.9666, 112.6326], 11);
+
+        // Layer dasar
+        var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var esriImagery = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+            attribution: "Tiles © Esri"
+        });
+
+        // Marker untuk lokasi wisata alam
+        var wisataMarkers = [
+            { lat: -8.267170064, lng: 112.9041943, name: "Bukit Bundu" },
+            { lat: -8.22567344, lng: 112.9148088, name: "Coban Sewu" },
+            { lat: -8.361718936, lng: 112.9490959, name: "Pantai Licin" },
+            { lat: -8.229036543, lng: 112.8849879, name: "Pemandian Ranu Sosro" },
+            { lat: -8.402573266, lng: 112.5391137, name: "Pantai Balekambang" },
+            { lat: -8.395065301, lng: 112.5173599, name: "Pantai Banyu Meneng" },
+            { lat: -8.402037904, lng: 112.5299032, name: "Pantai Jembatan Panjang" },
+            { lat: -8.396214371, lng: 112.5189018, name: "Pantai Kondangmerak" },
+            { lat: -8.400791651, lng: 112.5077411, name: "Pantai Mbehi" },
+            { lat: -8.401113652, lng: 112.5255467, name: "Pantai Ndaliputih" },
+            { lat: -8.402152174, lng: 112.5481228, name: "Pantai Regent" },
+            { lat: -8.395771243, lng: 112.518167, name: "Pantai Selok" },
+            { lat: -8.407339317, lng: 112.5729809, name: "Pantai Taman Ayu" },
+            { lat: -8.40322592, lng: 112.5058419, name: "Pantai Teluk Bidadari" },
+            { lat: -8.177605789, lng: 112.7669465, name: "Umbulan (Pemandian)" },
+            { lat: -8.252311371, lng: 112.8011245, name: "Gua Payung" },
+            { lat: -7.939613701, lng: 112.5311254, name: "Bumi Perkemahan Bedengan" },
+            { lat: -7.951880627, lng: 112.5433311, name: "P-WEC (Petungsewu Wildlife Education Center)" },
+            { lat: -8.393801836, lng: 112.4491178, name: "Pantai Bantol" },
+            { lat: -8.386101216, lng: 112.4255729, name: "Pantai Gunung Kombang" },
+            { lat: -8.379312964, lng: 112.3964883, name: "Pantai Jonggring Saloko" },
+            { lat: -8.394056026, lng: 112.4536004, name: "Pantai Kedung Celeng" },
+            { lat: -8.370770541, lng: 112.3921056, name: "Pantai Kondang Bandung" },
+            { lat: -8.394667427, lng: 112.480276, name: "Pantai Kondang Iwak" },
+            { lat: -8.34816795, lng: 112.3613214, name: "Pantai Modangan" },
+            { lat: -8.383343165, lng: 112.4238728, name: "Pantai Ngliyep" },
+            { lat: -8.37724859, lng: 112.4084173, name: "Pantai Nglurung" },
+            { lat: -8.381012792, lng: 112.4208188, name: "Pantai Pasir Panjang" },
+            { lat: -8.395710322, lng: 112.4486118, name: "Pantai Pulo Doro" },
+            { lat: -8.395635484, lng: 112.4577254, name: "Pantai Seling Ombo" },
+            { lat: -8.436243809, lng: 112.644027, name: "Pantai Bajulmati" },
+            { lat: -8.429943395, lng: 112.6145867, name: "Pantai Batu Bengkung" },
+            { lat: -8.445590316, lng: 112.6556604, name: "Pantai Gua Cina" },
+            { lat: -8.428018871, lng: 112.6292208, name: "Pantai Jolangkung" },
+            { lat: -8.415175304, lng: 112.5929983, name: "Pantai Kletakan" },
+            { lat: -8.408422589, lng: 112.5754183, name: "Pantai Nganteb" },
+            { lat: -8.416040405, lng: 112.5856491, name: "Pantai Ngudel" },
+            { lat: -8.437484598, lng: 112.6429466, name: "Pantai Ungapan" },
+            { lat: -8.404324999, lng: 112.569548, name: "Pantai Wonogoro" },
+            { lat: -8.122730032, lng: 112.6201357, name: "Sumber Sira" },
+            { lat: -7.974840011, lng: 112.8125605, name: "Coban Barnawi" },
+            { lat: -7.969310014, lng: 112.8031688, name: "Coban Jahe" },
+            { lat: -8.000111028, lng: 112.8083716, name: "Coban Jidor" },
+            { lat: -7.985511091, lng: 112.8327395, name: "Coban Jodo" },
+            { lat: -7.988529552, lng: 112.8318895, name: "Coban Singo" },
+            { lat: -7.95685733, lng: 112.8212133, name: "Coban Siuk" },
+            { lat: -7.95685733, lng: 112.8212133, name: "Gunung Mujur" },
+            { lat: -7.879196879, lng: 112.6219085, name: "Sumber Nyolo" },
+            { lat: -7.862303025, lng: 112.7333462, name: "Coban Supit Urang" },
+            { lat: -7.842598979, lng: 112.7205195, name: "Sumber air krabyakan" },
+            { lat: -7.843042608, lng: 112.7032408, name: "Pemandian Sumber Waras" },
+            { lat: -8.012300279, lng: 112.5197774, name: "Mata Air 'Sumber Jodo'" },
+            { lat: -8.021360821, lng: 112.4963337, name: "Mata Air 'Sumber Urip'" },
+            { lat: -8.048196898, lng: 112.5267287, name: "Mata Air 'Umbulan'" },
+            { lat: -8.200198328, lng: 112.531756, name: "Lembah Kera Panjat Tebing" },
+            { lat: -8.165460911, lng: 112.5928487, name: "Pemandian Sumber Maron" },
+            { lat: -8.174421855, lng: 112.600387, name: "Pemandian Sumber Taman" },
+            { lat: -8.174421855, lng: 112.600387, name: "Coban Pelangi" },
+            { lat: -7.995341852, lng: 112.8979368, name: "Coban Raksasa" },
+            { lat: -7.999273564, lng: 112.868987, name: "Coban Trisula" },
+            { lat: -8.015591933, lng: 112.9232203, name: "Gunung Bromo" },
+            { lat: -7.958421592, lng: 112.924595, name: "Alas Pujon Coban Sadang" },
+            { lat: -7.866232118, lng: 112.4239506, name: "Coban Grojogan Sewu" },
+            { lat: -7.884760189, lng: 112.4782524, name: "Coban Rondo" },
+            { lat: -7.869047247, lng: 112.4354544, name: "Hutan Pinus Bendosari" },
+            { lat: -7.824798254, lng: 112.4601259, name: "Telaga Madiredo" },
+            { lat: -7.807138181, lng: 112.6216724, name: "Budug Asu" },
+            { lat: -8.340926023, lng: 112.7951808, name: "Coban Tundo" },
+            { lat: -8.441445598, lng: 112.6656834, name: "Pantai Bangsong" },
+            { lat: -8.436342186, lng: 112.6730735, name: "Pantai Clungup" },
+            { lat: -8.440927596, lng: 112.6725811, name: "Pantai Gatra" },
+            { lat: -8.414815902, lng: 112.7484396, name: "Pantai Kali Apus/ Pringapus" },
+            { lat: -8.384543678, lng: 112.7762709, name: "Pantai Perawan" },
+            { lat: -8.431265798, lng: 112.6862332, name: "Pantai Sendang Biru" },
+            { lat: -8.415029378, lng: 112.7290277, name: "Pantai Sendiki" },
+            { lat: -8.416796836, lng: 112.7120202, name: "Pantai Tamban" },
+            { lat: -8.441158797, lng: 112.668555, name: "Pantai Teluk Asmara" },
+            { lat: -8.437528983, lng: 112.6826003, name: "Pantai Tiga Warna" },
+            { lat: -8.443442857, lng: 112.6508936, name: "Pantai Watu Leter" },
+            { lat: -8.049446806, lng: 112.7169378, name: "Sumber Jenon" },
+            { lat: -8.371887745, lng: 112.8215362, name: "Pantai Banyu Anjlok" },
+            { lat: -8.385806962, lng: 112.8179695, name: "Pantai Bolu-Bolu" },
+            { lat: -8.371014958, lng: 112.8420213, name: "Pantai Lenggoksono" },
+            { lat: -8.380858037, lng: 112.899542, name: "Pantai Sipelot" },
+            { lat: -8.415175304, lng: 112.5957448, name: "Pantai Teluk Kletekan" },
+            { lat: -8.374848571, lng: 112.8505131, name: "Pantai Wediawu" },
+            { lat: -7.990468399, lng: 112.8405438, name: "Coban Cinde" },
+            { lat: -8.013397279, lng: 112.8224347, name: "Coban Sumber Pitu" },
+            { lat: -8.002868378, lng: 112.5186628, name: "Alas Pakis" },
+            { lat: -7.981951819, lng: 112.5214886, name: "Coban Glothak" },
+            { lat: -8.000287604, lng: 112.5085352, name: "Precet Forest Park" },
+            { lat: -8.145106724, lng: 112.8285233, name: "Hutan Pinus Semeru" },
+            { lat: -8.148509685, lng: 112.7755879, name: "Hutan Pinus Winongan" },
+            { lat: -8.084767537, lng: 112.4983307, name: "Tanaka Waterfall" }
+        ];
+        wisataMarkers.forEach(function (location) {
+            L.marker([location.lat, location.lng]).addTo(map)
+                .bindPopup(`<b>${location.name}</b><br>Lokasi wisata alam.`);
+        });
+
+        // Layer wisata budaya
+        var wisataAlam = L.tileLayer.wms("https://malangkab.ina-sdi.or.id/geoserver/wms", {
+            layers: "Disparbud:destinasi_wisata_alam_350720230925171651",
+            format: "image/png",
+            transparent: true
+        });
+
+        // Kontrol Layer
+        var baseMaps = {
+            "OpenStreetMap": osm,
+            "Esri Imagery": esriImagery
+        };
+
+        var overlayMaps = {
+            "Wisata Alam": wisataAlam
+        };
+
+        L.control.layers(baseMaps).addTo(map);
+
+        // Tambahkan legenda
+        var legend = L.control({ position: 'bottomleft' });
+
+        legend.onAdd = function () {
+            var div = L.DomUtil.create('div', 'info legend');
+            div.innerHTML = '<p><b>Legenda:</b></p><p>Wisata Alam</p>';
+            return div;
+        };
+
+        legend.addTo(map);
+    </script>
+</body>
+
+</html>
